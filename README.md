@@ -1,4 +1,5 @@
 [![Project generated with PyScaffold](https://img.shields.io/badge/-PyScaffold-005CA0?logo=pyscaffold)](https://pyscaffold.org/)
+
 <!-- These are examples of badges you might also want to add to your README. Update the URLs accordingly.
 [![Built Status](https://api.cirrus-ci.com/github/<USER>/youtube_analysis.svg?branch=main)](https://cirrus-ci.com/github/<USER>/youtube_analysis)
 [![ReadTheDocs](https://readthedocs.org/projects/youtube_analysis/badge/?version=latest)](https://youtube_analysis.readthedocs.io/en/stable/)
@@ -9,102 +10,87 @@
 [![Twitter](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&label=Twitter)](https://twitter.com/youtube_analysis)
 -->
 
-# youtube_analysis
+# YouTube Comments Analysis
 
-> Add a short description here!
+> Repository containing Python notebooks and scripts for YouTube comments analysis.
 
-A longer description of your project goes here...
+## Features
 
-## Installation
+- **Pyscaffold Structure:** Organized and scalable project structure for easy update and extension.
+- **Conda Environment:** Utilizes Conda for managing dependencies, ensuring reproducibility.
+- **Notebooks:** Jupyter notebooks offering step-by-step workflow, including data collection, sentiment analysis and question anwsering.
+- **Scripts:** Python scripts for data extraction, preprocessing, and statistical insights from YouTube comments.
 
-In order to set up the necessary environment:
+## Getting Started
 
-1. review and uncomment what you need in `environment.yml` and create an environment `youtube_analysis` with the help of [conda]:
+1. Clone the repository: 
+`git clone https://github.com/abljoel/youtube-comments-analysis.git`
+2. Create an environment `youtube_analysis` with the help of [conda]:
    ```
-   conda env create -f environment.yml
+   conda env create -f youtube_analysis.yml
    ```
-2. activate the new environment with:
+3. Activate the new environment with:
    ```
    conda activate youtube_analysis
    ```
 
-> **_NOTE:_**  The conda environment will have youtube_analysis installed in editable mode.
-> Some changes, e.g. in `setup.cfg`, might require you to run `pip install -e .` again.
-
-
-Optional and needed only once after `git clone`:
-
-3. install several [pre-commit] git hooks with:
-   ```bash
-   pre-commit install
-   # You might also want to run `pre-commit autoupdate`
+4. For getting the project installed in editable mode for actively working on the code:
    ```
-   and checkout the configuration under `.pre-commit-config.yaml`.
-   The `-n, --no-verify` flag of `git commit` can be used to deactivate pre-commit hooks temporarily.
-
-4. install [nbstripout] git hooks to remove the output cells of committed notebooks with:
-   ```bash
-   nbstripout --install --attributes notebooks/.gitattributes
+   pip install -e .
    ```
-   This is useful to avoid large diffs due to plots in your notebooks.
-   A simple `nbstripout --uninstall` will revert these changes.
+
+5. Explore the `notebooks` directory for step-by-step analyses.
+6. Utilize the `scripts` directory for doing the work programmatically.
+7. The `src/youtube_analysis` directory contains the main functionality.
+
+## Notebooks
+
+The notebooks follow numerical order to easily locate steps. The last one, `06-information-extraction-from-comments.ipynb`, contains the final analysis for insight extraction.
+
+## Scripts
+
+1. **data_collection.py:** Script for extracting YouTube comments data.
+2. **data_preparation.py:** Prepare the data for analysis by cleaning text and extracting new features.
+3. **sentiment_extraction.py:** Label the comments for further analysis
+4. **comments_insight.py:** Give summary of sentiment ratio and most frequent topics
+
+#### Example Usages
+
+1. **data_collection.py:**
+    - Extract YouTube comments data.
+    ```bash
+    python data_collection.py --video_id YOUTUBE_VIDEO_ID --output_file comments_data.csv
+    ```
+    Replace `YOUTUBE_VIDEO_ID` with the actual video ID.
+
+2. **data_preparation.py:**
+    - Prepare data for analysis by cleaning text and extracting new features.
+    ```bash
+    python data_preparation.py --input_file comments_data.csv --output_file cleaned_features.pkl
+    ```
+
+3. **insight_extract.py:**
+    - Can generate a graph of sentiment ratio, identify most frequent topics, top author sentiments in number of comments, and plot engagement curve.
+    ```bash
+    python insight_extract.py --input_file cleaned_features.pkl --sentiment --output_file sentiment_ratio.png
+    ```
+       
+    ```bash
+    python insight_extract.py --input_file cleaned_features.pkl --engagement --output_file engagement_curves.png
+    ```
+    
+    ```bash
+    python insight_extract.py --input_file cleaned_features.pkl --top_viewer --output_file topviewer_sentiments.png
+    ```
+
+    ```bash
+    python insight_extract.py --input_file cleaned_features.pkl --top_topics 10 --output_file topic_cloud.png
+    ```
 
 
-Then take a look into the `scripts` and `notebooks` folders.
+## License
 
-## Dependency Management & Reproducibility
-
-1. Always keep your abstract (unpinned) dependencies updated in `environment.yml` and eventually
-   in `setup.cfg` if you want to ship and install your package via `pip` later on.
-2. Create concrete dependencies as `environment.lock.yml` for the exact reproduction of your
-   environment with:
-   ```bash
-   conda env export -n youtube_analysis -f environment.lock.yml
-   ```
-   For multi-OS development, consider using `--no-builds` during the export.
-3. Update your current environment with respect to a new `environment.lock.yml` using:
-   ```bash
-   conda env update -f environment.lock.yml --prune
-   ```
-## Project Organization
-
-```
-├── AUTHORS.md              <- List of developers and maintainers.
-├── CHANGELOG.md            <- Changelog to keep track of new features and fixes.
-├── CONTRIBUTING.md         <- Guidelines for contributing to this project.
-├── Dockerfile              <- Build a docker container with `docker build .`.
-├── LICENSE.txt             <- License as chosen on the command-line.
-├── README.md               <- The top-level README for developers.
-├── configs                 <- Directory for configurations of model & application.
-├── data
-│   ├── external            <- Data from third party sources.
-│   ├── interim             <- Intermediate data that has been transformed.
-│   ├── processed           <- The final, canonical data sets for modeling.
-│   └── raw                 <- The original, immutable data dump.
-├── docs                    <- Directory for Sphinx documentation in rst or md.
-├── environment.yml         <- The conda environment file for reproducibility.
-├── models                  <- Trained and serialized models, model predictions,
-│                              or model summaries.
-├── notebooks               <- Jupyter notebooks. Naming convention is a number (for
-│                              ordering), the creator's initials and a description,
-│                              e.g. `1.0-fw-initial-data-exploration`.
-├── pyproject.toml          <- Build configuration. Don't change! Use `pip install -e .`
-│                              to install for development or to build `tox -e build`.
-├── references              <- Data dictionaries, manuals, and all other materials.
-├── reports                 <- Generated analysis as HTML, PDF, LaTeX, etc.
-│   └── figures             <- Generated plots and figures for reports.
-├── scripts                 <- Analysis and production scripts which import the
-│                              actual PYTHON_PKG, e.g. train_model.
-├── setup.cfg               <- Declarative configuration of your project.
-├── setup.py                <- [DEPRECATED] Use `python setup.py develop` to install for
-│                              development or `python setup.py bdist_wheel` to build.
-├── src
-│   └── youtube_analysis    <- Actual Python package where the main functionality goes.
-├── tests                   <- Unit tests which can be run with `pytest`.
-├── .coveragerc             <- Configuration for coverage reports of unit tests.
-├── .isort.cfg              <- Configuration for git hook that sorts imports.
-└── .pre-commit-config.yaml <- Configuration of pre-commit git hooks.
-```
+This project is licensed under the MIT License - see the LICENSE.txt file for details.
 
 <!-- pyscaffold-notes -->
 
