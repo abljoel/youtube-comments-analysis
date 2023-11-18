@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Click + Logging Version of insight_extraction"""
+"""Insight Extraction Module"""
 import warnings
 from pathlib import Path
 import logging

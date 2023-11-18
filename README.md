@@ -51,8 +51,7 @@ The notebooks follow numerical order to easily locate steps. The last one, `06-i
 
 1. **data_collection.py:** Script for extracting YouTube comments data.
 2. **data_preparation.py:** Prepare the data for analysis by cleaning text and extracting new features.
-3. **sentiment_extraction.py:** Label the comments for further analysis
-4. **comments_insight.py:** Give summary of sentiment ratio and most frequent topics
+3. **insight_extraction.py:** Give summary of sentiment ratio and most frequent topics
 
 #### Example Usages
 
@@ -69,22 +68,26 @@ The notebooks follow numerical order to easily locate steps. The last one, `06-i
     python data_preparation.py --input_file comments_data.csv --output_file cleaned_features.pkl
     ```
 
-3. **insight_extract.py:**
+3. **insight_extraction.py:**
     - Can generate a graph of sentiment ratio, identify most frequent topics, top author sentiments in number of comments, and plot engagement curve.
     ```bash
-    python insight_extract.py --input_file cleaned_features.pkl --sentiment --output_file sentiment_ratio.png
+    python insight_extract.py --input_file cleaned_features.pkl --sentiment \
+    --output_file sentiment_ratio.png
     ```
        
     ```bash
-    python insight_extract.py --input_file cleaned_features.pkl --engagement --output_file engagement_curves.png
+    python insight_extract.py --input_file cleaned_features.pkl --engagement \
+    --output_file engagement_curves.png
     ```
     
     ```bash
-    python insight_extract.py --input_file cleaned_features.pkl --top_viewer --output_file topviewer_sentiments.png
+    python insight_extract.py --input_file cleaned_features.pkl --top_viewer \
+    --output_file topviewer_sentiments.png
     ```
 
     ```bash
-    python insight_extract.py --input_file cleaned_features.pkl --top_topics 10 --output_file topic_cloud.png
+    python insight_extract.py --input_file cleaned_features.pkl --top_topics 10 \
+    --output_file topic_cloud.png
     ```
 
 
