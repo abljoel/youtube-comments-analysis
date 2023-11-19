@@ -30,14 +30,6 @@ def read_data(fname, fdir=CURRENT_DIR):
     return data
 
 
-def convert_data(df):
-    df.published_at = pd.to_datetime(df.published_at)
-    df.updated_at = pd.to_datetime(df.updated_at)
-    df.text = df.text.astype("string")
-    df.text = df.author.astype("string")
-    return df
-
-
 def remove_html_tags(text):
     soup = BeautifulSoup(text, "html.parser")
     return soup.get_text()
@@ -89,10 +81,8 @@ def lemmatize_text(text):
     return " ".join([lemmatizer.lemmatize(w) for w in tokenized_text])
 
 
-sent_analyzer = SentimentIntensityAnalyzer()
-
-
 def get_sent_label(text="", score=None):
+    sent_analyzer = SentimentIntensityAnalyzer()
     if not score:
         score = sent_analyzer.polarity_scores(text)["compound"]
     if 0.4 < score:
@@ -103,6 +93,7 @@ def get_sent_label(text="", score=None):
 
 
 def get_sent_score(text):
+    sent_analyzer = SentimentIntensityAnalyzer()
     score = sent_analyzer.polarity_scores(text)["compound"]
     return score
 
@@ -145,7 +136,7 @@ def main(input_file, output_file):
     - output_file (str): Output file path for storing processed corpus data.
     """
     try:
-        df = convert_data(read_data(input_file))
+        df = read_data(input_file)
         df["cleaned_text"] = df.text.apply(lambda t: remove_html_tags(t))
         df["cleaned_text"] = df.cleaned_text.apply(lambda t: translate_emojis(t))
         df["cleaned_text"] = df.cleaned_text.apply(lambda t: translate_emoticons(t))
