@@ -71,22 +71,22 @@ The notebooks follow numerical order to easily locate steps. The last one, `06-i
 3. **insight_extraction.py:**
     - Can generate a graph of sentiment ratio, identify most frequent topics, top author sentiments in number of comments, and plot engagement curve.
     ```bash
-    python insight_extract.py --input_file cleaned_features.pkl --sentiment \
+    python insight_extraction.py --input_file cleaned_features.pkl --sentiment \
     --output_file sentiment_ratio.png
     ```
        
     ```bash
-    python insight_extract.py --input_file cleaned_features.pkl --engagement \
+    python insight_extraction.py --input_file cleaned_features.pkl --engagement \
     --output_file engagement_curves.png
     ```
     
     ```bash
-    python insight_extract.py --input_file cleaned_features.pkl --top_viewer \
+    python insight_extraction.py --input_file cleaned_features.pkl --top_viewer \
     --output_file topviewer_sentiments.png
     ```
 
     ```bash
-    python insight_extract.py --input_file cleaned_features.pkl --top_topics 10 \
+    python insight_extraction.py --input_file cleaned_features.pkl --top_topics 10 \
     --output_file topic_cloud.png
     ```
 
