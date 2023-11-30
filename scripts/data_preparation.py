@@ -1,5 +1,41 @@
 #!/usr/bin/env python
-"""Data Preparation Module"""
+"""
+Text Data Processing Module
+
+This module provides functions for processing and preparing text-based data.
+It includes functions for cleaning HTML tags, translating emojis and emoticons,
+filtering text noise, removing stopwords, lemmatizing text, and performing sentiment analysis.
+
+Functions:
+    - save_corpus: Saves a processed DataFrame to a pickle file.
+    - read_data: Reads data from a CSV file into a DataFrame.
+    - remove_html_tags: Removes HTML tags from text.
+    - translate_emojis: Translates Unicode emojis in text.
+    - translate_emoticons: Translates emoticons in text.
+    - filter_text_noise: Removes non-alphabetic characters from text.
+    - filter_stopwords: Removes stopwords from text.
+    - lemmatize_text: Lemmatizes words in text.
+    - get_sent_label: Returns sentiment label ('positive', 'neutral', 'negative') based on a text's 
+      sentiment score.
+    - get_sent_score: Returns the sentiment score of a text.
+    - has_emojis: Checks if a text contains emojis (returns 1 if true, 0 otherwise).
+    - has_emoticons: Checks if a text contains emoticons (returns 1 if true, 0 otherwise).
+    - main: Performs data preparation tasks for a text-based DataFrame.
+
+Parameters:
+    - input_file (str): Input file path for reading raw data.
+    - output_file (str): Output file path for storing processed corpus data.
+
+Note:
+    To use the functions in this module, ensure you have the required libraries installed
+    (e.g., 'pandas', 'bs4', 'emot', 'nltk') and have the NLTK data downloaded (for stopwords
+    and lemmatization).
+
+Usage:
+    Run this module as a script to process text-based data and save the processed corpus.
+    Command Line Example:
+        python your_module_name.py --input_file INPUT_FILE_PATH --output_file OUTPUT_FILE_PATH
+"""
 import warnings
 import logging
 from pathlib import Path
@@ -21,21 +57,25 @@ CURRENT_DIR = Path()
 
 
 def save_corpus(df, fdir=CURRENT_DIR, fname="corpus.pkl"):
+    """Saves a Corpus DataFrame to a pickle file."""
     df.to_pickle(fdir / fname)
     logging.info(f"Saved the processed corpus to {fdir / fname}")
 
 
 def read_data(fname, fdir=CURRENT_DIR):
+    """Reads data from a CSV file into a DataFrame."""
     data = pd.read_csv(fdir / fname)
     return data
 
 
 def remove_html_tags(text):
+    """Removes HTML tags from text."""
     soup = BeautifulSoup(text, "html.parser")
     return soup.get_text()
 
 
 def translate_emojis(text):
+    """Translates Unicode emojis in text."""
     tokenized_text = word_tokenize(text)
     for emo in UNICODE_EMOJI:
         if emo in tokenized_text:
@@ -47,6 +87,7 @@ def translate_emojis(text):
 
 
 def translate_emoticons(text):
+    """Translates emoticons in text."""
     new_text = text
     for ticon in EMOTICONS_EMO:
         if ticon in new_text:
@@ -55,6 +96,7 @@ def translate_emoticons(text):
 
 
 def filter_text_noise(text):
+    """Removes non-alphabetic characters from text."""
     next_text = text
     for e in next_text:
         if not e.isalpha():
@@ -62,10 +104,9 @@ def filter_text_noise(text):
     return next_text
 
 
-stop_words = set(stopwords.words("english"))
-
 
 def filter_stopwords(text):
+    """Removes stopwords from text."""
     stop_words = set(stopwords.words("english"))
     tokenized_text = word_tokenize(text)
     filtered_text = []
@@ -76,12 +117,34 @@ def filter_stopwords(text):
 
 
 def lemmatize_text(text):
+    """Lemmatizes words in text."""
     lemmatizer = WordNetLemmatizer()
     tokenized_text = word_tokenize(text)
     return " ".join([lemmatizer.lemmatize(w) for w in tokenized_text])
 
 
 def get_sent_label(text="", score=None):
+    """
+    Returns sentiment label ('positive', 'neutral', 'negative') based on a text's sentiment score.
+
+    Args:
+        text (str): The input text for sentiment analysis.
+        score (float, optional): The sentiment score of the text. If not provided,
+                                  it will be calculated using the SentimentIntensityAnalyzer.
+
+    Returns:
+        str: Sentiment label indicating the sentiment of the input text.
+
+    Note:
+        The function uses the SentimentIntensityAnalyzer from the nltk library
+        to calculate the sentiment score. If a custom score is not provided,
+        the function calculates the score for the input text and categorizes it
+        as 'positive', 'neutral', or 'negative' based on predefined thresholds.
+
+    Example:
+        >>> get_sent_label("This is a positive statement.")
+        'positive'
+    """
     sent_analyzer = SentimentIntensityAnalyzer()
     if not score:
         score = sent_analyzer.polarity_scores(text)["compound"]
@@ -93,12 +156,31 @@ def get_sent_label(text="", score=None):
 
 
 def get_sent_score(text):
+    """
+    Returns the sentiment score of a text.
+
+    Args:
+        text (str): The input text for sentiment analysis.
+
+    Returns:
+        float: Sentiment score indicating the overall sentiment of the input text.
+
+    Note:
+        The function uses the SentimentIntensityAnalyzer from the nltk library
+        to calculate the sentiment score. The score ranges from -1 (most negative)
+        to 1 (most positive).
+
+    Example:
+        >>> get_sent_score("This is a positive statement.")
+        0.6369
+    """
     sent_analyzer = SentimentIntensityAnalyzer()
     score = sent_analyzer.polarity_scores(text)["compound"]
     return score
 
 
 def has_emojis(text):
+    """Checks if a text contains emojis (returns 1 if true, 0 otherwise)."""
     tokenized_text = word_tokenize(text)
     for emo in UNICODE_EMOJI:
         if emo in tokenized_text:
@@ -107,6 +189,7 @@ def has_emojis(text):
 
 
 def has_emoticons(text):
+    """Checks if a text contains emoticons (returns 1 if true, 0 otherwise)."""
     new_text = text
     for ticon in EMOTICONS_EMO:
         if ticon in new_text:
