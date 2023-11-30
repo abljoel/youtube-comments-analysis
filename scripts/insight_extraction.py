@@ -31,12 +31,41 @@ def save_sentiment_ratio(df, fname, viewer=None):
 
 
 def save_top_viewer(df, fname):
+    """
+    Extracts and saves data related to the top viewer from the given DataFrame.
+
+    Args:
+        df (pandas.DataFrame): The input DataFrame containing viewer data.
+        fname (str): The output file name for saving the data.
+
+    Note:
+        The function calculates the top viewer based on the 'author' column in the DataFrame.
+        It then extracts data related to the top viewer and saves the sentiment ratio using
+        the 'save_sentiment_ratio' function.
+    """
     top_viewer = df["author"].describe()["top"]
     top_viewer_data = df[df["author"] == top_viewer]
     save_sentiment_ratio(top_viewer_data, fname, viewer=top_viewer)
 
 
-def save_top_topics(df, n_viewers, fname):
+def save_topics_from_top_viewers(df, n_viewers, fname):
+    """
+    Generates and saves a word cloud representing the common topics in the comments
+    from the top N liked commenters in the given DataFrame.
+
+    Args:
+        df (pandas.DataFrame): The input DataFrame containing comments data.
+        n_viewers (int): The number of top commenters whose comments will be considered.
+        fname (str): The output file name for saving the word cloud image.
+
+    Returns:
+        None
+
+    Note:
+        The function extracts the lemmatized text from the top N liked commenters
+        based on the number of likes in the DataFrame. It then generates a word cloud
+        visualization using the 'WordCloud' library and saves the image file.
+    """
     n_commenters = int(n_viewers)
     top_n_commenters_content = (
         df.sort_values(by="likes", ascending=False).head(n_commenters).lemmatized_text
@@ -63,6 +92,23 @@ def save_top_topics(df, n_viewers, fname):
 
 
 def save_engagement_curve(df, fname):
+    """
+    Generates and saves an engagement curve, plotting the number of likes and comments over time.
+
+    Args:
+        df (pandas.DataFrame): The input DataFrame containing comments data with a
+        'published_at'column.
+        fname (str): The output file name for saving the engagement curve plot.
+
+    Returns:
+        None
+
+    Note:
+        The function converts the 'published_at' column to datetime format and groups the
+        data by date.
+        It then calculates the sum of likes and the total number of comments for each date.
+        The engagement values are normalized using MinMaxScaler and plotted over time.
+    """
     corpus = df.copy()
     corpus.published_at = pd.to_datetime(corpus.published_at)
     n_comments_over_time = corpus.groupby(corpus["published_at"].dt.date).agg(
@@ -111,9 +157,9 @@ def save_engagement_curve(df, fname):
     help="Output top viewer sentiment",
 )
 @click.option(
-    "--top_topics",
+    "--top_viewer_topics",
     type=str,
-    help="Display word cloud of most frequent terms",
+    help="Display wordcloud of most frequent terms for top N viewers",
 )
 @click.option(
     "--engagement",
@@ -132,15 +178,35 @@ def save_engagement_curve(df, fname):
     help="Output file path for saving plots",
     required=True,
 )
-def main(sentiment, top_viewer, top_topics, engagement, input_file, output_file):
+def main(sentiment, top_viewer, top_viewer_topics, engagement, input_file, output_file):
+    """
+    Main function to generate and save visualizations based on user input options.
+
+    Args:
+        sentiment (bool): If True, plot Ratio of sentiments.
+        top_viewer (bool): If True, output top viewer sentiment.
+        top_viewer_topics (str): Number of top viewers for displaying wordcloud of 
+                                 most frequent terms.
+        engagement (bool): If True, plot Engagement curve.
+        input_file (str): Input file path for loading corpus data.
+        output_file (str): Output file path for saving plots.
+
+    Returns:
+        None
+
+    Note:
+        The function reads a corpus DataFrame from a pickle file and generates visualizations
+        based on the specified options. It uses functions like 'save_sentiment_ratio',
+        'save_top_viewer', 'save_topics_from_top_viewers', and 'save_engagement_curve'.
+    """
     corpus = pd.read_pickle(CURRENT_DIR / input_file)
     try:
         if sentiment:
             save_sentiment_ratio(corpus, output_file)
         if top_viewer:
             save_top_viewer(corpus, output_file)
-        if top_topics:
-            save_top_topics(corpus, top_topics, output_file)
+        if top_viewer_topics:
+            save_topics_from_top_viewers(corpus, top_viewer_topics, output_file)
         if engagement:
             save_engagement_curve(corpus, output_file)
     except Exception as e:
