@@ -1,4 +1,35 @@
-"""Module for Data inspection tasks"""
+"""
+Data Inspection Utilities Module
+
+This module provides utilities for exploring and visualizing data within a DataFrame.
+
+Functions:
+    - get_duplicates: Returns all duplicated rows in a DataFrame or those with specific content.
+    - get_dataset_info: Returns summary and metadata from a DataFrame, including dimensions,
+                        attribute set, data types, cardinality, values, and missing values.
+    - plot_stem: Graphs a stem plot distribution of a specified variable in the DataFrame.
+    - plot_cat: Graphs a bar plot of categorical variables in the DataFrame.
+    - plot_pie: Graphs a pie chart of categorical variables in the DataFrame.
+
+Usage:
+    # Import the module and use the provided functions
+    import edautils
+
+    # Example: Get duplicates in the DataFrame
+    edautils.get_duplicates(df)
+
+    # Example: Get dataset information
+    edautils.get_dataset_info(df)
+
+    # Example: Plot stem plot distribution
+    edautils.plot_stem(df, 'count_variable', 'Stem Plot Title')
+
+    # Example: Plot bar plot of categorical variable
+    edautils.plot_cat(df, 'categorical_variable')
+
+    # Example: Plot pie chart of categorical variable
+    edautils.plot_pie(df, 'categorical_variable')
+"""
 
 import matplotlib.pyplot as plt
 
@@ -46,12 +77,15 @@ def get_dataset_info(df):
     print(f"Number of duplicated rows: {get_duplicates(df)}")
 
 
-def plot_stem(df, count_var, orientation="vertical"):
+def plot_stem(df, count_var, title="", orientation="vertical"):
     """Graph a stem plot distribution"""
     x_vals = df[count_var].value_counts().index
     y_vals = df[count_var].value_counts().values
     plt.stem(x_vals, y_vals, linefmt="black", orientation=orientation)
-    plt.title(count_var)
+    if not title:
+        plt.title(count_var)
+    else:
+        plt.title(title)
     plt.show()
 
 
