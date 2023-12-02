@@ -1,5 +1,25 @@
 #!/usr/bin/env python
-"""Insight Extraction Module"""
+"""
+Insight Extraction Script
+
+This module provides functions for information extraction throught data visualization,
+including sentiment proportion charts, top viewer sentiment extraction, word cloud generation
+for top commenters, and engagement curve plotting.
+
+Functions:
+    - save_sentiment_ratio: Graphs a pie chart of sentiment categories.
+    - save_top_viewer: Extracts and saves data related to the top viewer from the given DataFrame.
+    - save_topics_from_top_viewers: Generates and saves a word cloud representing common topics
+                                    in the comments from the top N liked commenters.
+    - save_engagement_curve: Generates and saves an engagement curve, plotting the number of likes
+                             and comments over time.
+    - main: Main function to generate and save visualizations based on user input options.
+
+Usage:
+    # Example: Execute script to generate visualizations based on user input options
+    python insight_extraction.py --sentiment --output_file "opinions_pie.png"
+"""
+
 import warnings
 from pathlib import Path
 import logging
@@ -185,7 +205,7 @@ def main(sentiment, top_viewer, top_viewer_topics, engagement, input_file, outpu
     Args:
         sentiment (bool): If True, plot Ratio of sentiments.
         top_viewer (bool): If True, output top viewer sentiment.
-        top_viewer_topics (str): Number of top viewers for displaying wordcloud of 
+        top_viewer_topics (str): Number of top viewers for displaying wordcloud of
                                  most frequent terms.
         engagement (bool): If True, plot Engagement curve.
         input_file (str): Input file path for loading corpus data.
