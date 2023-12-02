@@ -27,6 +27,7 @@
 `git clone https://github.com/abljoel/youtube-comments-analysis.git`
 2. Create an environment `youtube_analysis` with the help of [conda]:
    ```
+   cd youtube-comments-analysis
    conda env create -f youtube_analysis.yml
    ```
 3. Activate the new environment with:
@@ -63,31 +64,27 @@ The notebooks follow numerical order to easily locate steps. The last one, `06-i
     Replace `YOUTUBE_VIDEO_ID` with the actual video ID.
 
 2. **data_preparation.py:**
-    - Prepare data for analysis by cleaning text and extracting new features.
+    - Prepare data for analysis by cleaning text and extracting new features. It saves it to pickle format.
     ```bash
     python data_preparation.py --input_file comments_data.csv --output_file cleaned_features.pkl
     ```
 
 3. **insight_extraction.py:**
-    - Can generate a graph of sentiment ratio, identify most frequent topics, top author sentiments in number of comments, and plot engagement curve.
+    - Read pickle corpus. Can generate a graph of sentiment ratio, identify frequent topics for top liked commenters, inspect top viewer sentiments, and plot the engagement curve.
     ```bash
-    python insight_extraction.py --input_file cleaned_features.pkl --sentiment \
-    --output_file sentiment_ratio.png
+    python insight_extraction.py --input_file cleaned_features.pkl --sentiment --output_file sentiment_ratio.png
     ```
        
     ```bash
-    python insight_extraction.py --input_file cleaned_features.pkl --engagement \
-    --output_file engagement_curves.png
+    python insight_extraction.py --input_file cleaned_features.pkl --engagement --output_file engagement_curves.png
     ```
     
     ```bash
-    python insight_extraction.py --input_file cleaned_features.pkl --top_viewer \
-    --output_file topviewer_sentiments.png
+    python insight_extraction.py --input_file cleaned_features.pkl --top_viewer --output_file topviewer_sentiments.png
     ```
 
     ```bash
-    python insight_extraction.py --input_file cleaned_features.pkl --top_topics 10 \
-    --output_file topic_cloud.png
+    python insight_extraction.py --input_file cleaned_features.pkl --top_viewer_topics 5 --output_file topic_cloud.png
     ```
 
 
