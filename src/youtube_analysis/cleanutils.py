@@ -1,3 +1,19 @@
+"""
+Text Processing Utilities Module
+
+This module provides functions for processing and transforming text data,
+including the removal of HTML tags, translation of Unicode emojis and emoticons,
+removal of non-alphabetic characters, filtering of stopwords, and lemmatization.
+
+Functions:
+    - remove_html_tags: Removes HTML tags from text.
+    - translate_emojis: Translates Unicode emojis in text.
+    - translate_emoticons: Translates emoticons in text.
+    - filter_text_noise: Removes non-alphabetic characters from text.
+    - filter_stopwords: Removes stopwords from text.
+    - lemmatize_text: Lemmatizes words in text.
+"""
+
 from bs4 import BeautifulSoup
 from emot import UNICODE_EMOJI, EMOTICONS_EMO
 from nltk.tokenize import word_tokenize
